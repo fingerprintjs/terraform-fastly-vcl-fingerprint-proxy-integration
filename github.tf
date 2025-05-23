@@ -17,7 +17,7 @@ resource "null_resource" "download_vcl" {
 
     command = <<EOT
       mkdir -p ./assets
-      curl -L -H "Authorization: token ${var.github_token}" \
+      curl -L \
         -o ./assets/${var.vcl_asset_name} \
         "${local.vcl_download_url}"
     EOT

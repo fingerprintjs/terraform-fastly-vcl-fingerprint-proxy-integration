@@ -31,11 +31,6 @@ variable "vcl_version_min" {
   default = "latest"
 }
 
-variable "github_token" {
-  type      = string
-  sensitive = true
-}
-
 variable "fastly_api_key" {
   type = string
 }

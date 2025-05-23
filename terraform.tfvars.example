@@ -1,4 +1,3 @@
-github_token = "github_" # Your Github Personal Access Token comes here
 fastly_api_key = "sp-" # Your Fastly API Key comes here
 integration_domain = "orkunfpjs2.com" # Set here to the subdomain you have chosen for the integration, for example metrics.yourwebsite.com. Avoid terms commonly blocked by ad blockers like fingerprint, fpjs, etc.
 main_host = "origin.orkunfpjs.com" # Set here to something like metrics-origin.yourwebsite.com. This origin does not need to exist because the VCL template will forward all valid requests to the appropriate Fingerprint servers.
