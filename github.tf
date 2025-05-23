@@ -28,3 +28,8 @@ resource "null_resource" "download_vcl" {
     asset   = var.vcl_asset_name
   }
 }
+
+data "local_file" "vcl" {
+  filename = "${path.module}/assets/${var.vcl_asset_name}"
+  depends_on = [null_resource.download_vcl]
+}

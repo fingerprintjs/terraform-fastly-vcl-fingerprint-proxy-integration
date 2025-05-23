@@ -41,11 +41,12 @@ resource "fastly_service_vcl" "fingerprint_integration" {
 
   vcl {
     name    = var.vcl_asset_name
-    content = file("${path.module}/assets/${var.vcl_asset_name}")
+    content = data.local_file.vcl.content
     main    = true
   }
 
   force_destroy = true
+  depends_on = [data.local_file.vcl]
 }
 
 resource "fastly_service_dictionary_items" "fingerprint_integration_dictionary_items" {
