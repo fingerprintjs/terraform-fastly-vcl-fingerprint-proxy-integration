@@ -59,3 +59,13 @@ variable "dictionary_name" {
   type = string
   default = "fingerprint_config"
 }
+
+variable "integration_name" {
+  type = string
+  default = "fingerprint_integration"
+}
+
+variable "download_asset" {
+  type = bool
+  default = true
+}

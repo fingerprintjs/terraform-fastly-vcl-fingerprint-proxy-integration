@@ -1,6 +1,29 @@
 # This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
+provider "registry.terraform.io/cludden/get" {
+  version     = "0.1.2"
+  constraints = "0.1.2"
+  hashes = [
+    "h1:R9y5STGCtdWnjmgrKXQjK4Ex39xL00xg3AVm1v7Kj8w=",
+    "zh:19bcf3660ac7545103cf999e0066442f9d6350db9654e1496726520cef287246",
+    "zh:1ed94f911d1822cb90802847adae4d8d7ec543672378d0311b2da90004f9633c",
+    "zh:23ac290393f3867caabd1c5eea3c5cefd924de43c24aa1358dc686eae107a9e5",
+    "zh:3cad84ef226f87be3de73b8b74cc2c76306d197672e6b6cdb2c899f630498cba",
+    "zh:4c87cbbdd5f549507683b3052bb0d025700ba59862589ad5e0b269a4a0930e55",
+    "zh:5ae0c5c8f52d50b3fdef1624426a53fcf0b2c75d20c85c8da713231cbb43f6a3",
+    "zh:73851d74f2add095bc8ab598258e390f055461f32979ff5b02496b871a1e5e13",
+    "zh:7c248baf1345741c435619a9a563655df43da5ba496600c72194dd9d7aa2eac3",
+    "zh:8ac9e0e51f8f28d5de0b34d908956470a8a99099138d86981419bda8278b125a",
+    "zh:b70540ebd2f1a87aef12403cb31ecf1115677071d0ad0011402f321d2c44d6ed",
+    "zh:b753b5beb44d47528e8eedad25bfc91e07ba75842805e5a8b70d4159fe7ce3ab",
+    "zh:bad61ab3755bf6d9ce4234ee50cb2ffc336f5f1cd649450da45d62c0141fdf32",
+    "zh:c26b2e920dfe6e66e31c84dfec23be008aa79f25896e625f2b339d0117e25f33",
+    "zh:c5e90fc1eece9e66ff97b145be7ee2ddb9a77538750d326854d6f178fb6261a1",
+    "zh:d155257d11d30e92991ca200a7f02c34fb78b0ad61fec837a6ccc8738e58980f",
+  ]
+}
+
 provider "registry.terraform.io/fastly/fastly" {
   version     = "7.0.0"
   constraints = ">= 6.1.0"
