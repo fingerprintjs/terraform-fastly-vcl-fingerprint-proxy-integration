@@ -6,11 +6,6 @@ variable "main_host" {
   type = string
 }
 
-variable "test_domain_name" {
-  type = string
-  default = ""
-}
-
 variable "repository_organization_name" {
   type    = string
   default = "fingerprintjs"
@@ -52,7 +47,7 @@ variable "get_result_path" {
 
 variable "proxy_secret" {
   type = string
-  default = "secret"
+  sensitive = true
 }
 
 variable "dictionary_name" {

@@ -2,7 +2,7 @@ terraform {
   required_providers {
     fastly = {
       source  = "fastly/fastly"
-      version = ">= 6.1.0"
+      version = ">= 7.0.0"
     }
   }
 }
@@ -27,13 +27,6 @@ resource "fastly_service_vcl" "fingerprint_integration" {
     name = var.integration_domain
   }
 
-  dynamic "domain" {
-    for_each = var.test_domain_name == "" ? [] : [0]
-    content {
-      name = "${var.test_domain_name}.global.ssl.fastly.net"
-    }
-  }
-
   backend {
     address = var.main_host
     name    = "Main Host"
@@ -53,12 +46,15 @@ resource "fastly_service_vcl" "fingerprint_integration" {
   force_destroy = true
 }
 
+locals {
+  selected_dictionary = {
+    for d in fastly_service_vcl.fingerprint_integration.dictionary : d.name => d
+  }[var.dictionary_name]
+}
+
 resource "fastly_service_dictionary_items" "fingerprint_integration_dictionary_items" {
-  for_each = {
-    for d in fastly_service_vcl.fingerprint_integration.dictionary : d.name => d if d.name == var.dictionary_name
-  }
   service_id    = fastly_service_vcl.fingerprint_integration.id
-  dictionary_id = each.value.dictionary_id
+  dictionary_id = local.selected_dictionary.dictionary_id
   items = {
     PROXY_SECRET : var.proxy_secret,
     INTEGRATION_PATH : var.integration_path,
