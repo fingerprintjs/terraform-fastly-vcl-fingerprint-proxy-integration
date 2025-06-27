@@ -16,8 +16,8 @@ provider "fastly" {
 module "vcl_asset" {
   count                        = var.download_asset ? 1 : 0
   source                       = "./modules/download_asset"
-  repository_name              = var.repository_name
-  repository_organization_name = var.repository_organization_name
+  asset_repository_name              = var.asset_repository_name
+  asset_repository_organization_name = var.asset_repository_organization_name
   vcl_asset_name               = var.vcl_asset_name
   vcl_version_min              = var.asset_version
 }

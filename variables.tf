@@ -8,12 +8,12 @@ variable "main_host" {
   nullable = false
 }
 
-variable "repository_organization_name" {
+variable "asset_repository_organization_name" {
   type    = string
   default = "fingerprintjs"
 }
 
-variable "repository_name" {
+variable "asset_repository_name" {
   type    = string
   default = "fingerprint-pro-fastly-vcl-integration"
 }

@@ -8,8 +8,8 @@ terraform {
 }
 
 data "github_release" "selected" {
-  repository  = var.repository_name
-  owner       = var.repository_organization_name
+  repository  = var.asset_repository_name
+  owner       = var.asset_repository_organization_name
   retrieve_by = var.vcl_version_min
 }
 
