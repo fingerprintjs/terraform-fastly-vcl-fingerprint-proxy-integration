@@ -14,25 +14,20 @@ data "github_release" "selected" {
 }
 
 locals {
-  compute_download_url = [
+  asset_download_url = [
     for asset in data.github_release.selected.assets :
     asset.browser_download_url
     if asset.name == var.vcl_asset_name
   ][0]
 
-  compute_asset_path = "${path.cwd}/assets/${var.vcl_asset_name}"
+  asset_path = "${path.cwd}/assets/${var.vcl_asset_name}"
 }
 
 resource "null_resource" "download_asset" {
   provisioner "local-exec" {
     command = <<EOT
       mkdir -p "${path.cwd}/assets"
-      curl -L -o "${local.compute_asset_path}" "${local.compute_download_url}"
+      curl -L -o "${local.asset_path}" "${local.asset_download_url}"
     EOT
   }
-}
-
-data "local_file" "compute_asset" {
-  filename   = local.compute_asset_path
-  depends_on = [null_resource.download_asset]
 }

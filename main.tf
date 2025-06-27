@@ -1,4 +1,6 @@
 terraform {
+  required_version = ">= 1.5"
+
   required_providers {
     fastly = {
       source  = "fastly/fastly"
@@ -17,7 +19,7 @@ module "vcl_asset" {
   repository_name              = var.repository_name
   repository_organization_name = var.repository_organization_name
   vcl_asset_name               = var.vcl_asset_name
-  vcl_version_min              = var.vcl_version_min
+  vcl_version_min              = var.asset_version
 }
 
 resource "fastly_service_vcl" "fingerprint_integration" {
