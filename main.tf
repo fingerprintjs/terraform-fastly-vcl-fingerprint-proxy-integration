@@ -13,13 +13,18 @@ provider "fastly" {
   api_key = var.fastly_api_key
 }
 
+locals {
+  asset_path = "${path.cwd}/assets/${var.vcl_asset_name}"
+}
+
 module "vcl_asset" {
-  count                        = var.download_asset ? 1 : 0
-  source                       = "./modules/download_asset"
+  count                              = var.download_asset ? 1 : 0
+  source                             = "./modules/download_asset"
   asset_repository_name              = var.asset_repository_name
   asset_repository_organization_name = var.asset_repository_organization_name
-  vcl_asset_name               = var.vcl_asset_name
-  vcl_version_min              = var.asset_version
+  vcl_asset_name                     = var.vcl_asset_name
+  vcl_version_min                    = var.asset_version
+  asset_download_path                = local.asset_path
 }
 
 resource "fastly_service_vcl" "fingerprint_integration" {
@@ -41,7 +46,7 @@ resource "fastly_service_vcl" "fingerprint_integration" {
 
   vcl {
     name = var.vcl_asset_name
-    content = file("${path.cwd}/assets/${var.vcl_asset_name}")
+    content = file(local.asset_path)
     main = true
   }
 
@@ -51,7 +56,9 @@ resource "fastly_service_vcl" "fingerprint_integration" {
 locals {
   selected_dictionary = {
     for d in fastly_service_vcl.fingerprint_integration.dictionary : d.name => d
-  }[var.dictionary_name]
+  }[
+  var.dictionary_name
+  ]
 }
 
 resource "fastly_service_dictionary_items" "fingerprint_integration_dictionary_items" {

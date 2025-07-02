@@ -17,3 +17,8 @@ variable "vcl_version_min" {
   type    = string
   default = "latest"
 }
+
+variable "asset_download_path" {
+  type = string
+  nullable = false
+}

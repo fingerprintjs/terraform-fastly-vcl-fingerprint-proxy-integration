@@ -20,7 +20,7 @@ locals {
     if asset.name == var.vcl_asset_name
   ][0]
 
-  asset_path = "${path.cwd}/assets/${var.vcl_asset_name}"
+  asset_path = var.asset_download_path
 }
 
 resource "null_resource" "download_asset" {
