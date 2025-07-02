@@ -8,7 +8,7 @@ terraform {
   required_version = ">=1.5"
 }
 
-module "vcl" {
+module "fingerprint_fastly_vcl_integration" {
   source                     = "github.com/fingerprintjs/temp-fastly-vcl-terraform"
   fastly_api_key             = "<your fastly api key>"
   integration_domain         = "<your domain to serve fingerprint integration>"
@@ -26,7 +26,7 @@ module "vcl" {
 Run these commands in order
 ```shell
 terraform init
-terraform apply -target=module.vcl.module.vcl_asset
+terraform apply -target=module.fingerprint_fastly_vcl_integration.module.vcl_asset
 terraform apply
 ```
 
