@@ -15,6 +15,11 @@ provider "fastly" {
 
 locals {
   asset_path = "${path.cwd}/assets/${var.vcl_asset_name}"
+  selected_dictionary = {
+    for d in fastly_service_vcl.fingerprint_integration.dictionary : d.name => d
+  }[
+  var.dictionary_name
+  ]
 }
 
 module "vcl_asset" {
@@ -51,14 +56,6 @@ resource "fastly_service_vcl" "fingerprint_integration" {
   }
 
   force_destroy = true
-}
-
-locals {
-  selected_dictionary = {
-    for d in fastly_service_vcl.fingerprint_integration.dictionary : d.name => d
-  }[
-  var.dictionary_name
-  ]
 }
 
 resource "fastly_service_dictionary_items" "fingerprint_integration_dictionary_items" {
