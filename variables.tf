@@ -83,7 +83,7 @@ variable "dictionary_name" {
 
 variable "integration_name" {
   type = string
-  default = "fingerprint_integration"
+  default = "fingerprint-fastly-vcl-proxy-integration"
   nullable = false
   validation {
     condition     = can(regex("^([a-zA-Z0-9\\_])+$", var.integration_name))
