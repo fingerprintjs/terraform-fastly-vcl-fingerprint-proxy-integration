@@ -1,6 +1,6 @@
 # Prerequisites
 
-* Copy your Fastly API Key
+* Copy your Fastly API token
 * Create your own terraform folder and create main.tf file
 * Fill the file like this:
 ```terraform
@@ -10,7 +10,7 @@ terraform {
 
 module "fingerprint_fastly_vcl_integration" {
   source                     = "github.com/fingerprintjs/temp-fastly-vcl-terraform"
-  fastly_api_key             = "<your fastly api key>"
+  fastly_api_token             = "<your fastly api token>"
   integration_domain         = "<your domain to serve fingerprint integration>"
   agent_script_download_path = "<random path like this: qwe123>"
   get_result_path            = "<random path like this: asd987>"
