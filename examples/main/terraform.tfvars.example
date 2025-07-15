@@ -1,0 +1,7 @@
+agent_script_download_path  = "463N7"
+get_result_path             = "r35U17"
+integration_path            = "zyk12Xc"
+proxy_secret                = "YOUR_PROXY_SECRET_KEY_CREATED_IN_FINGERPRINT_DASHBOARD"
+fastly_api_token            = "YOUR_API_TOKEN_CREATED_IN_FASTLY_DASHBOARD"
+integration_domain          = "metrics.yourwebsite.com"
+main_host                   = "origin.yourwebsite.com"
