@@ -9,10 +9,10 @@ To quickly run the example for testing purposes, you can:
 
 1. Copy the [terraform.tfvars.example](./terraform.tfvars.example) file into a new `terraform.tfvars` file and replace the values with your own. The variables are defined and described in the [variables.tf](./variables.tf) file.
 2. Copy your Fastly API token
-4. Run `terraform init`.
-5. Run `terraform apply -target=module.fingerprint_fastly_vcl_integration.module.compute_asset`
-7. Run `terraform plan`.
-8. Run `terraform apply`.
+3. Run `terraform init`.
+4. Run `terraform apply -target=module.fingerprint_fastly_vcl_integration.module.compute_asset`
+5. Run `terraform plan`.
+6. Run `terraform apply`.
 
 ### Using in production
 
