@@ -86,7 +86,7 @@ variable "integration_name" {
   default = "fingerprint-fastly-vcl-proxy-integration"
   nullable = false
   validation {
-    condition     = can(regex("^([a-zA-Z0-9\\_])+$", var.integration_name))
+    condition     = can(regex("^([a-zA-Z0-9\\_\\-])+$", var.integration_name))
     error_message = "value should only consist of alphanumeric values and underscores"
   }
 }
