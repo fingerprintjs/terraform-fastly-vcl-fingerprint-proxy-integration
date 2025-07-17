@@ -41,7 +41,7 @@ You can install the Fastly VCL proxy integration [manually](https://dev.fingerpr
 > [!WARNING]  
 > The underlying data contract in the identification logic can change to keep up with browser updates. Using the Fastly VCL Proxy Integration might require occasional manual updates on your side. Ignoring these updates will lead to lower accuracy or service disruption.
 
-## Getting started
+## 1. Install the Terraform module
 
 - Create your own terraform folder and create main.tf file
 - Fill the file like this:
@@ -82,7 +82,7 @@ You can see the full list of the Terraform module's variables below:
 
 * Run `terraform init`
 
-## Deploy
+## 2. Deploy your Terraform changes
 
 Run these commands in order:
 ```shell
@@ -97,7 +97,7 @@ terraform apply -target=module.fingerprint_fastly_vcl_integration.module.vcl_ass
 terraform apply
 ```
 
-## Custom VCL
+## Using a custom VCL asset
 
 If you want to use your own asset instead of downloading latest follow these steps:
 
