@@ -43,8 +43,8 @@ You can install the Fastly VCL proxy integration [manually](https://dev.fingerpr
 
 ## 1. Install the Terraform module
 
-- Create your own terraform folder and create main.tf file
-- Fill the file like this:
+1. Add the module to your Terraform file (for example, `main.tf`).
+2. Configure it with your Fastly API token, Fingerprint proxy secret, integration domain, and other required values.
 
 ```terraform
 terraform {
@@ -53,13 +53,13 @@ terraform {
 
 module "fingerprint_fastly_vcl_integration" {
   source                     = "github.com/fingerprintjs/temp-fastly-vcl-terraform"
-  fastly_api_token             = "<your fastly api token>"
-  integration_domain         = "<your domain to serve fingerprint integration>"
-  agent_script_download_path = "<random path like this: qwe123>"
-  get_result_path            = "<random path like this: asd987>"
-  integration_path           = "<random path like this: xyz456>"
-  main_host                  = "<your origin domain to serve your website>"
-  proxy_secret               = "<your proxy secret>"
+  fastly_api_token           = "FASTLY_API_TOKEN"
+  proxy_secret               = "FINGERPRINT_PROXY_SECRET"
+  integration_path           = "INTEGRATION_PATH"
+  agent_script_download_path = "AGENT_SCRIPT_DOWNLOAD_PATH"
+  get_result_path            = "GET_RESULT_PATH"
+  integration_domain         = "metrics.yourwebsite.com"
+  main_host                  = "yourwebsite.com"
 }
 ```
 
@@ -68,47 +68,71 @@ You can see the full list of the Terraform module's variables below:
 | Variable                     | Description                                               | Required | Example                                        |
 | ---------------------------- | --------------------------------------------------------- | -------- | ---------------------------------------------- |
 | `fastly_api_token`           | Your Fastly API token                                     | Required | `"ABC123...xyz"`                               |
-| `integration_domain`         | Domain used for the proxy integration                     | Required | `"metrics.yourwebsite.com"`                    |
-| `main_host`                  | Your origin server domain                                 | Required | `"yourwebsite.com"`                            |
 | `proxy_secret`               | Your Fingerprint proxy secret                             | Required | `"9h7jk2s1"`                                   |
 | `integration_path`           | Path prefix for proxy requests                            | Required | `"kyfy7t0a"`                                   |
 | `agent_script_download_path` | Path for serving the JavaScript agent                     | Required | `"cc7bu2o8"`                                   |
 | `get_result_path`            | Path for identification requests                          | Required | `"sy5k3279"`                                   |
+| `integration_domain`         | Domain used for the proxy integration                     | Required | `"metrics.yourwebsite.com"`                    |
+| `main_host`                  | Your origin server domain                                 | Required | `"yourwebsite.com"`                            |
 | `dictionary_name`            | Name of the Fastly Dictionary for config values           | Optional | `"fingerprint_config"`                         |
 | `integration_name`           | Name of the Fastly CDN service                            | Optional | `"fingerprint-fastly-vcl-proxy-integration"`   |
 | `download_asset`             | Whether to auto-download the latest VCL release           | Optional | `true`                                         |
 | `vcl_asset_name`             | Custom VCL asset file if not downloading the official one | Optional | `"fingerprint-pro-fastly-vcl-integration.vcl"` |
 | `asset_version`              | GitHub release version used for the VCL asset             | Optional | `"latest"`                                     |
 
-* Run `terraform init`
-
 ## 2. Deploy your Terraform changes
 
-Run these commands in order:
-```shell
-terraform init
-```
+1. Initialize the Terraform module:
+   
+    ```shell
+    terraform init
+    ```
 
-```shell
-terraform apply -target=module.fingerprint_fastly_vcl_integration.module.vcl_asset
-```
+2. Apply the VCL asset:
 
-```shell
-terraform apply
-```
+    ```shell
+    terraform apply -target=module.fingerprint_fastly_vcl_integration.module.vcl_asset
+    ```
 
-## Using a custom VCL asset
+3. Apply the changes to your Fastly service:
 
-If you want to use your own asset instead of downloading latest follow these steps:
+    ```shell
+    terraform apply
+    ```
 
-Place your custom asset in `<your_module_root>/assets/custom-asset.vcl` and then edit your `main.tf` file, and add these 2 variables inside "vcl" module block:
-```terraform
-download_asset = false
-vcl_asset_name = "custom-asset.vcl"
-```
+## Using a custom VCL asset (optional)
 
-Run these commands:
-```shell
-terraform init
-terraform apply
-```
+You can use your own VCL asset instead of downloading the official one: 
+
+1. Place your custom asset in `<your_module_root>/assets/custom-asset.vcl`
+2. In your `main.tf` file, add these 2 variables to the module configuration:
+
+    ```diff
+    module "fingerprint_fastly_vcl_integration" {
+      # ...
+    + download_asset = false
+    + vcl_asset_name = "custom-asset.vcl"
+    }
+    ```
+
+3. Run `terraform init`.
+4. Run `terraform apply`.
+
+## Examples
+
+This repository also includes an example Terraform project. Use this example only as a reference, and make sure to follow best practices when provisioning Fastly services:
+
+- [Minimal example](./examples/minimal/)
+
+## How to update
+
+The Terraform module does include any mechanism for automatic updates. To keep your integration up to date, please run `terraform apply` regularly.
+
+## More resources
+
+- [Documentation](https://dev.fingerprint.com/docs/fastly-vcl-proxy-integration)
+
+## License
+
+This project is licensed under the MIT license. See the [LICENSE](/LICENSE) file for more info.
+
