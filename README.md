@@ -112,10 +112,3 @@ Run these commands:
 terraform init
 terraform apply
 ```
-
-## Destroy
-
-To destroy, run this:
-```shell
-terraform destroy
-```
