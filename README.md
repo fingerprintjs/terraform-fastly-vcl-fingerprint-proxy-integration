@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-<a href="https://registry.terraform.io/modules/fingerprintjs/fingerprint-fastly-proxy-integration/vcl/latest"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fregistry.terraform.io%2Fv2%2Fmodules%2Ffingerprintjs%2Ffingerprint-fastly-proxy-integration%2Fvcl%3Finclude%3Dlatest-version&query=%24.included%5B0%5D.attributes.version&prefix=v&label=Terraform" alt="Current version"></a>
+<a href="https://registry.terraform.io/modules/fingerprintjs/vcl-fingerprint-proxy-integration/fastly/latest"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fregistry.terraform.io%2Fv2%2Fmodules%2Ffingerprintjs%2Fvcl-fingerprint-proxy-integration%2Ffastly%3Finclude%3Dlatest-version&query=%24.included%5B0%5D.attributes.version&prefix=v&label=Terraform" alt="Current version"></a>
 <a href="https://github.com/fingerprintjs/terraform-fastly-vcl-fingerprint-proxy-integration"><img src="https://img.shields.io/github/v/release/fingerprintjs/terraform-fastly-vcl-fingerprint-proxy-integration" alt="Current version"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/:license-mit-blue.svg" alt="MIT license"></a>
 <a href="https://discord.gg/39EpE2neBg"><img src="https://img.shields.io/discord/852099967190433792?style=logo&label=Discord&logo=Discord&logoColor=white" alt="Discord server"></a>
@@ -26,7 +26,7 @@ Fingerprint Fastly VCL Integration is responsible for
 
 This [improves](https://dev.fingerprint.com/docs/fastly-vcl-proxy-integration#the-benefits-of-using-the-fastly-vcl-proxy-integration) both accuracy and reliability of visitor identification and bot detection on your site.
 
-You can install the Fastly VCL proxy integration [manually](https://dev.fingerprint.com/docs/deploy-fastly-vcl-manually) or as [a Terraform module](https://registry.terraform.io/modules/fingerprintjs/fingerprint-fastly-proxy-integration/vcl/latest) included in this repository. For more details, see the [full documentation](https://dev.fingerprint.com/docs/fastly-vcl-proxy-integration).
+You can install the Fastly VCL proxy integration [manually](https://dev.fingerprint.com/docs/deploy-fastly-vcl-manually) or as [a Terraform module](https://registry.terraform.io/modules/fingerprintjs/vcl-fingerprint-proxy-integration/fastly/latest) included in this repository. For more details, see the [full documentation](https://dev.fingerprint.com/docs/fastly-vcl-proxy-integration).
 
 
 ## Requirements
