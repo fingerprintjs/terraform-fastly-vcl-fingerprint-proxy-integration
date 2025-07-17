@@ -1,4 +1,4 @@
-# Contributing to Fingerprint Pro Fastly VCL Integration Terraform Module
+# Contributing to Fingerprint Fastly VCL Integration Terraform Module
 
 ## Working with code
 

@@ -15,14 +15,14 @@
 <a href="https://discord.gg/39EpE2neBg"><img src="https://img.shields.io/discord/852099967190433792?style=logo&label=Discord&logo=Discord&logoColor=white" alt="Discord server"></a>
 </p>
 
-# Fingerprint Pro Fastly VCL Integration (Terraform module)
+# Fingerprint Fastly VCL Integration (Terraform module)
 
 [Fingerprint](https://fingerprint.com/) is a device intelligence platform offering industry-leading accuracy.
 
-Fingerprint Pro Fastly VCL Integration is responsible for
+Fingerprint Fastly VCL Integration is responsible for
 
-- Proxying download requests of the latest Fingerprint Pro JS Agent between your site and Fingerprint CDN.
-- Proxying identification requests and responses between your site and Fingerprint Pro's APIs.
+- Proxying download requests of the latest Fingerprint JS Agent between your site and Fingerprint CDN.
+- Proxying identification requests and responses between your site and Fingerprint's APIs.
 
 This [improves](https://dev.fingerprint.com/docs/fastly-vcl-proxy-integration#the-benefits-of-using-the-fastly-vcl-proxy-integration) both accuracy and reliability of visitor identification and bot detection on your site.
 
