@@ -1,7 +1,9 @@
-agent_script_download_path  = "463N7"
-get_result_path             = "r35U17"
-integration_path            = "zyk12Xc"
+# Replace the values with your own, random paths recommended
+agent_script_download_path  = "agent"
+get_result_path             = "result"
+integration_path            = "fp"
 proxy_secret                = "YOUR_PROXY_SECRET_KEY_CREATED_IN_FINGERPRINT_DASHBOARD"
 fastly_api_token            = "YOUR_API_TOKEN_CREATED_IN_FASTLY_DASHBOARD"
+// You can test the integration using the Fastly test domain, like `https://metrics.yourwebsite.com.global.prod.fastly.net`
 integration_domain          = "metrics.yourwebsite.com"
-main_host                   = "origin.yourwebsite.com"
+main_host                   = "yourwebsite.com"

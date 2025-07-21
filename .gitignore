@@ -11,5 +11,6 @@ override.tf.json
 .terraformrc
 terraform.rc
 .idea
-
 assets
+examples/**/*.lock.hcl
+.DS_Store
