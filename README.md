@@ -65,20 +65,21 @@ module "fingerprint_fastly_vcl_integration" {
 
 You can see the full list of the Terraform module's variables below:
 
-| Variable                     | Description                                               | Required | Example                                        |
-| ---------------------------- | --------------------------------------------------------- | -------- | ---------------------------------------------- |
-| `fastly_api_token`           | Your Fastly API token                                     | Required | `"ABC123...xyz"`                               |
-| `proxy_secret`               | Your Fingerprint proxy secret                             | Required | `"9h7jk2s1"`                                   |
-| `integration_path`           | Path prefix for proxy requests                            | Required | `"kyfy7t0a"`                                   |
-| `agent_script_download_path` | Path for serving the JavaScript agent                     | Required | `"cc7bu2o8"`                                   |
-| `get_result_path`            | Path for identification requests                          | Required | `"sy5k3279"`                                   |
-| `integration_domain`         | Domain used for the proxy integration                     | Required | `"metrics.yourwebsite.com"`                    |
-| `main_host`                  | Your origin server domain                                 | Required | `"yourwebsite.com"`                            |
-| `dictionary_name`            | Name of the Fastly Dictionary for config values           | Optional | `"fingerprint_config"`                         |
-| `integration_name`           | Name of the Fastly CDN service                            | Optional | `"fingerprint-fastly-vcl-proxy-integration"`   |
-| `download_asset`             | Whether to auto-download the latest VCL release           | Optional | `true`                                         |
-| `vcl_asset_name`             | Custom VCL asset file if not downloading the official one | Optional | `"fingerprint-pro-fastly-vcl-integration.vcl"` |
-| `asset_version`              | GitHub release version used for the VCL asset             | Optional | `"latest"`                                     |
+| Variable                         | Description                                                                                                                                                                                   | Required | Example                                        |
+|----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|------------------------------------------------|
+| `fastly_api_token`               | Your Fastly API token                                                                                                                                                                         | Required | `"ABC123...xyz"`                               |
+| `proxy_secret`                   | Your Fingerprint proxy secret                                                                                                                                                                 | Required | `"9h7jk2s1"`                                   |
+| `integration_path`               | Path prefix for proxy requests                                                                                                                                                                | Required | `"kyfy7t0a"`                                   |
+| `agent_script_download_path`     | Path for serving the JavaScript agent                                                                                                                                                         | Required | `"cc7bu2o8"`                                   |
+| `get_result_path`                | Path for identification requests                                                                                                                                                              | Required | `"sy5k3279"`                                   |
+| `integration_domain`             | Domain used for the proxy integration                                                                                                                                                         | Required | `"metrics.yourwebsite.com"`                    |
+| `main_host`                      | Your origin server domain                                                                                                                                                                     | Required | `"yourwebsite.com"`                            |
+| `dictionary_name`                | Name of the Fastly Dictionary for config values                                                                                                                                               | Optional | `"fingerprint_config"`                         |
+| `integration_name`               | Name of the Fastly CDN service                                                                                                                                                                | Optional | `"fingerprint-fastly-vcl-proxy-integration"`   |
+| `download_asset`                 | Whether to auto-download the latest VCL release                                                                                                                                               | Optional | `true`                                         |
+| `vcl_asset_name`                 | Custom VCL asset file if not downloading the official one                                                                                                                                     | Optional | `"fingerprint-pro-fastly-vcl-integration.vcl"` |
+| `asset_version`                  | GitHub release version used for the VCL asset                                                                                                                                                 | Optional | `"latest"`                                     |
+| `manage_fastly_dictionary_items` | Manage Fastly Dictionary items via terraform, see [Fastly documentation](https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#manage_items-1) | Optional | `false`                                        |
 
 ## 2. Deploy your Terraform changes
 
