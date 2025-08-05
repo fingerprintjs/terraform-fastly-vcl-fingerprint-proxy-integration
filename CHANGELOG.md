@@ -1,3 +1,10 @@
+## [1.0.0-rc.2](https://github.com/fingerprintjs/terraform-fastly-vcl-fingerprint-proxy-integration/compare/v1.0.0-rc.1...v1.0.0-rc.2) (2025-08-05)
+
+
+### Features
+
+* add variable manage_fastly_dictionary_items ([e9bf2f7](https://github.com/fingerprintjs/terraform-fastly-vcl-fingerprint-proxy-integration/commit/e9bf2f700a8d1013dfbb50ecfeb7040537b3198b))
+
 ## 1.0.0-rc.1 (2025-07-23)
 
 
