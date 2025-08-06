@@ -1,3 +1,10 @@
+## [1.0.0-rc.3](https://github.com/fingerprintjs/terraform-fastly-vcl-fingerprint-proxy-integration/compare/v1.0.0-rc.2...v1.0.0-rc.3) (2025-08-06)
+
+
+### Bug Fixes
+
+* change manage_items as manage_entries ([7af2ce6](https://github.com/fingerprintjs/terraform-fastly-vcl-fingerprint-proxy-integration/commit/7af2ce6ddb7d27dd075e50c70967a15ee976215c))
+
 ## [1.0.0-rc.2](https://github.com/fingerprintjs/terraform-fastly-vcl-fingerprint-proxy-integration/compare/v1.0.0-rc.1...v1.0.0-rc.2) (2025-08-05)
 
 
