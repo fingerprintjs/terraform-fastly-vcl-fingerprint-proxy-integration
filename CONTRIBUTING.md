@@ -61,3 +61,24 @@ To test terraform module using Fingerprint's staging environment, you need to [c
   ```
 - [Use your own custom asset](./README.md#custom-vcl) to deploy your integration
 
+## Using Release Candidates
+
+To use a release candidate version of the module, specify it explicitly in the version field:
+
+```terraform
+module "fingerprint_fastly_vcl_integration" {
+   source  = "fingerprintjs/vcl-fingerprint-proxy-integration/fastly"
+   version = "1.0.0-rc.1"
+   # Other module inputs
+}
+```
+
+Alternatively, you can point directly to the GitHub repository and use a branch (e.g., `rc`) via the ref parameter.
+This ensures you're always using the latest commit from that branch:
+
+```terraform
+module "fingerprint_fastly_vcl_integration" {
+   source = "github.com/fingerprintjs/terraform-fastly-vcl-fingerprint-proxy-integration?ref=rc"
+   # Other module inputs
+}
+```

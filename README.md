@@ -53,7 +53,6 @@ terraform {
 
 module "fingerprint_fastly_vcl_integration" {
   source                     = "fingerprintjs/vcl-fingerprint-proxy-integration/fastly"
-  version                    = "~> 1.0"
   fastly_api_token           = "FASTLY_API_TOKEN"
   proxy_secret               = "FINGERPRINT_PROXY_SECRET"
   integration_path           = "INTEGRATION_PATH"
@@ -81,32 +80,6 @@ You can see the full list of the Terraform module's variables below:
 | `vcl_asset_name`                 | Custom VCL asset file if not downloading the official one                                                                                                                                     | Optional | `"fingerprint-pro-fastly-vcl-integration.vcl"` |
 | `asset_version`                  | GitHub release version used for the VCL asset                                                                                                                                                 | Optional | `"latest"`                                     |
 | `manage_fastly_dictionary_items` | Manage Fastly Dictionary items via terraform, see [Fastly documentation](https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#manage_items-1) | Optional | `false`                                        |
-
-### Using Release Candidates (Optional)
-
-To use a release candidate version of the module, specify it explicitly in the version field:
-
-```terraform
-module "fingerprint_fastly_vcl_integration" {
-   source  = "fingerprintjs/vcl-fingerprint-proxy-integration/fastly"
-   version = "1.0.0-rc.1"
-   # Other module inputs
-}
-```
-
-Alternatively, you can point directly to the GitHub repository and use a branch (e.g., `rc`) via the ref parameter. 
-This ensures you're always using the latest commit from that branch:
-
-```terraform
-module "fingerprint_fastly_vcl_integration" {
-   source = "github.com/fingerprintjs/terraform-fastly-vcl-fingerprint-proxy-integration?ref=rc"
-   # Other module inputs
-}
-```
-
-> [!WARNING]   
-> Using a GitHub source with `ref` disables version locking and may result in unexpected changes when the branch is updated. 
-> Recommended for development or testing only.
 
 ## 2. Deploy your Terraform changes
 
