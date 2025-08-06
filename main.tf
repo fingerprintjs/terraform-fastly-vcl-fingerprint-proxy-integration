@@ -61,7 +61,7 @@ resource "fastly_service_vcl" "fingerprint_integration" {
 resource "fastly_service_dictionary_items" "fingerprint_integration_dictionary_items" {
   service_id    = fastly_service_vcl.fingerprint_integration.id
   dictionary_id = local.selected_dictionary.dictionary_id
-  manage_entries = var.manage_fastly_dictionary_items
+  manage_items = var.manage_fastly_dictionary_items
   items = {
     PROXY_SECRET : var.proxy_secret,
     INTEGRATION_PATH : var.integration_path,
