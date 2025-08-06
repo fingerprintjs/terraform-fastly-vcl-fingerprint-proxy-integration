@@ -52,7 +52,7 @@ terraform {
 }
 
 module "fingerprint_fastly_vcl_integration" {
-  source                     = "github.com/fingerprintjs/temp-fastly-vcl-terraform"
+  source                     = "fingerprintjs/vcl-fingerprint-proxy-integration/fastly"
   fastly_api_token           = "FASTLY_API_TOKEN"
   proxy_secret               = "FINGERPRINT_PROXY_SECRET"
   integration_path           = "INTEGRATION_PATH"
