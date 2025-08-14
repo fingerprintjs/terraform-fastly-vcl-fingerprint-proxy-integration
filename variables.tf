@@ -81,6 +81,13 @@ variable "dictionary_name" {
   }
 }
 
+variable "manage_fastly_dictionary_items" {
+  type = bool
+  default = false
+  nullable = false
+  description = "Manage Fastly Dictionary items via terraform, see link: https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#manage_items-1"
+}
+
 variable "integration_name" {
   type = string
   default = "fingerprint-fastly-vcl-proxy-integration"
