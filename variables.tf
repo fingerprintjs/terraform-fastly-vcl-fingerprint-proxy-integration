@@ -48,8 +48,7 @@ variable "agent_script_download_path" {
   nullable = true
   default  = null
   validation {
-    condition     = var.agent_script_download_path == null ? true :
-      can(regex("^([a-zA-Z0-9\\-])+$", var.agent_script_download_path))
+    condition     = var.agent_script_download_path == null ? true : can(regex("^([a-zA-Z0-9\\-])+$", var.agent_script_download_path))
     error_message = "value should only consist of alphanumeric values and dashes"
   }
 }
