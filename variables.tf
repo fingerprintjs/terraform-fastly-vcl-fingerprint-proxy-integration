@@ -44,19 +44,22 @@ variable "integration_path" {
 }
 
 variable "agent_script_download_path" {
-  type = string
-  nullable = false
+  type     = string
+  nullable = true
+  default  = null
   validation {
-    condition     = can(regex("^([a-zA-Z0-9\\-])+$", var.agent_script_download_path))
+    condition     = var.agent_script_download_path == null ? true :
+      can(regex("^([a-zA-Z0-9\\-])+$", var.agent_script_download_path))
     error_message = "value should only consist of alphanumeric values and dashes"
   }
 }
 
 variable "get_result_path" {
-  type = string
-  nullable = false
+  type     = string
+  nullable = true
+  default  = null
   validation {
-    condition     = can(regex("^([a-zA-Z0-9\\-])+$", var.get_result_path))
+    condition     = var.get_result_path == null ? true : can(regex("^([a-zA-Z0-9\\-])+$", var.get_result_path))
     error_message = "value should only consist of alphanumeric values and dashes"
   }
 }

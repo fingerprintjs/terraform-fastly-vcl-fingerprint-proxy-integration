@@ -13,16 +13,6 @@ variable "integration_path" {
   type = string
 }
 
-variable "agent_script_download_path" {
-  description = "Path for downloading the Fingerprint JavaScript Agent"
-  type = string
-}
-
-variable "get_result_path" {
-  description = "Path for proxying identification requests"
-  type = string
-}
-
 variable "integration_domain" {
   description = "Domain used for your proxy integration"
   type = string
