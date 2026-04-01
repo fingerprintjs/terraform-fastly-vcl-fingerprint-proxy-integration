@@ -63,9 +63,11 @@ resource "fastly_service_dictionary_items" "fingerprint_integration_dictionary_i
   dictionary_id = local.selected_dictionary.dictionary_id
   manage_items = var.manage_fastly_dictionary_items
   items = {
-    PROXY_SECRET : var.proxy_secret,
-    INTEGRATION_PATH : var.integration_path,
-    AGENT_SCRIPT_DOWNLOAD_PATH : var.agent_script_download_path,
-    GET_RESULT_PATH : var.get_result_path,
+    for k, v in {
+      PROXY_SECRET               = var.proxy_secret
+      INTEGRATION_PATH           = var.integration_path
+      AGENT_SCRIPT_DOWNLOAD_PATH = var.agent_script_download_path
+      GET_RESULT_PATH            = var.get_result_path
+    } : k => v if v != null
   }
 }
