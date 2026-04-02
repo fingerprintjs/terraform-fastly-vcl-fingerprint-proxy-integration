@@ -56,8 +56,6 @@ module "fingerprint_fastly_vcl_integration" {
   fastly_api_token           = "FASTLY_API_TOKEN"
   proxy_secret               = "FINGERPRINT_PROXY_SECRET"
   integration_path           = "INTEGRATION_PATH"
-  agent_script_download_path = "AGENT_SCRIPT_DOWNLOAD_PATH"
-  get_result_path            = "GET_RESULT_PATH"
   integration_domain         = "metrics.yourwebsite.com"
   main_host                  = "yourwebsite.com"
 }
@@ -70,10 +68,10 @@ You can see the full list of the Terraform module's variables below:
 | `fastly_api_token`               | Your Fastly API token                                                                                                                                                                         | Required | `"ABC123...xyz"`                               |
 | `proxy_secret`                   | Your Fingerprint proxy secret                                                                                                                                                                 | Required | `"9h7jk2s1"`                                   |
 | `integration_path`               | Path prefix for proxy requests                                                                                                                                                                | Required | `"kyfy7t0a"`                                   |
-| `agent_script_download_path`     | Path for serving the JavaScript agent                                                                                                                                                         | Required | `"cc7bu2o8"`                                   |
-| `get_result_path`                | Path for identification requests                                                                                                                                                              | Required | `"sy5k3279"`                                   |
 | `integration_domain`             | Domain used for the proxy integration                                                                                                                                                         | Required | `"metrics.yourwebsite.com"`                    |
 | `main_host`                      | Your origin server domain                                                                                                                                                                     | Required | `"yourwebsite.com"`                            |
+| `agent_script_download_path`     | Path for serving the JavaScript agent (API v3 Only)                                                                                                                                           | Optional | `"cc7bu2o8"`                                   |
+| `get_result_path`                | Path for identification requests (API v3 Only)                                                                                                                                                | Optional | `"sy5k3279"`                                   |
 | `dictionary_name`                | Name of the Fastly Dictionary for config values                                                                                                                                               | Optional | `"fingerprint_config"`                         |
 | `integration_name`               | Name of the Fastly CDN service                                                                                                                                                                | Optional | `"fingerprint-fastly-vcl-proxy-integration"`   |
 | `download_asset`                 | Whether to auto-download the latest VCL release                                                                                                                                               | Optional | `true`                                         |
