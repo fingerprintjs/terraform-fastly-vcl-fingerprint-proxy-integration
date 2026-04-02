@@ -6,7 +6,7 @@
     "test": "echo \"there are no tests planned\"",
     "test:dts": "echo \"there are no typechecks planned\"",
     "build": "bash ./scripts/preparePackage.sh",
-    "changeset:publish": "HUSKY=0 changeset publish",
+    "changeset:publish": "changeset publish",
     "changeset:version": "changeset version"
   },
   "license": "ISC",
