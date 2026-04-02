@@ -14,3 +14,5 @@ terraform.rc
 assets
 examples/**/*.lock.hcl
 .DS_Store
+package.zip
+node_modules

@@ -1,0 +1,16 @@
+{
+  "name": "terraform-fastly-vcl-fingerprint-proxy-integration",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"there are no tests planned\"",
+    "test:dts": "echo \"there are no typechecks planned\"",
+    "build": "bash ./scripts/preparePackage.sh",
+    "changeset:publish": "HUSKY=0 changeset publish",
+    "changeset:version": "changeset version"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@changesets/cli": "^2.30.0"
+  }
+}
