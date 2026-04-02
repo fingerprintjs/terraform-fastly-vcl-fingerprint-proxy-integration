@@ -4,5 +4,7 @@
   "initialVersions": {
     "terraform-fastly-vcl-fingerprint-proxy-integration": "1.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "cozy-paws-beam"
+  ]
 }
