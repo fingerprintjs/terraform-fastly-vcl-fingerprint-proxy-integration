@@ -5,7 +5,7 @@ variable "asset_repository_organization_name" {
 
 variable "asset_repository_name" {
   type    = string
-  default = "fingerprint-pro-fastly-vcl-integration"
+  default = "fastly-vcl-proxy"
 }
 
 variable "vcl_asset_name" {

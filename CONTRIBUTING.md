@@ -47,17 +47,17 @@ Then you can visit your domain preview with this URL: [https://mydomain.com.glob
 
 ## How test using Fingerprint Staging Environment
 
-To test terraform module using Fingerprint's staging environment, you need to [customize your VCL asset](https://github.com/fingerprintjs/fingerprint-pro-fastly-vcl-integration?tab=readme-ov-file#customizing-the-template).
+To test terraform module using Fingerprint's staging environment, you need to [customize your VCL asset](https://github.com/fingerprintjs/fastly-vcl-proxy?tab=readme-ov-file#customizing-the-template).
 
-- Clone [Fingerprint VCL Integration](https://github.com/fingerprintjs/fingerprint-pro-fastly-vcl-integration) repository.
+- Clone [Fingerprint VCL Integration](https://github.com/fingerprintjs/fastly-vcl-proxy) repository.
   ```shell
-  git clone git@github.com:fingerprintjs/fingerprint-pro-fastly-vcl-integration.git
-  cd fingerprint-pro-fastly-vcl-integration
+  git clone git@github.com:fingerprintjs/fastly-vcl-proxy.git
+  cd fastly-vcl-proxy
   pnpm install
   ```
 - Build your own VCL file:
   ```shell
-  pnpm build --fpcdn-domain "procdn.fpjs.sh" --fpjs-domain "api.stage.fpjs.sh"
+  pnpm build --fpjs-domain "api.stage.fpjs.sh"
   ```
 - [Use your own custom asset](./README.md#custom-vcl) to deploy your integration
 
