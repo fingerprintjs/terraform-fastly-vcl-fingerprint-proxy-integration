@@ -1,5 +1,5 @@
 {
-  "mode": "pre",
+  "mode": "exit",
   "tag": "rc",
   "initialVersions": {
     "terraform-fastly-vcl-fingerprint-proxy-integration": "1.0.0"
