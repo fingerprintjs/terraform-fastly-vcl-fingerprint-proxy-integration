@@ -1,3 +1,16 @@
+## 2.0.0
+
+### Major Changes
+
+- Introduce Fingerprint Fastly Proxy Integration v2.0 support
+
+  Docs:
+
+  - [Deploy Fastly VCL using Terraform for APIv4](https://docs.fingerprint.com/docs/deploy-fastly-vcl-using-terraform)
+
+  Notice:
+  Changes does not break your current deployments. The properties `agent_script_download_path` and `get_result_path` are now optional. ([a19ba11](https://github.com/fingerprintjs/terraform-fastly-vcl-fingerprint-proxy-integration/commit/a19ba118abbd1c957e44633512df8417ff14da74))
+
 ## 2.0.0-rc.0
 
 ### Major Changes
