@@ -29,11 +29,6 @@ variable "asset_version" {
   default = "latest"
 }
 
-variable "fastly_api_token" {
-  type = string
-  nullable = false
-}
-
 variable "integration_path" {
   type = string
   nullable = false
