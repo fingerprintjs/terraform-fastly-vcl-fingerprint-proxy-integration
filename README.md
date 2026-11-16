@@ -44,16 +44,28 @@ You can install the Fastly VCL proxy integration [manually](https://dev.fingerpr
 ## 1. Install the Terraform module
 
 1. Add the module to your Terraform file (for example, `main.tf`).
-2. Configure it with your Fastly API token, Fingerprint proxy secret, integration domain, and other required values.
+2. Configure it with your Fingerprint proxy secret, integration domain, and other required values.
+3. The module uses the `fastly` provider from your configuration, so configure the provider with your Fastly API token.
 
 ```terraform
 terraform {
   required_version = ">=1.5"
+  required_providers {
+    fastly = {
+      source  = "fastly/fastly"
+      version = ">= 7.0.0"
+    }
+  }
+}
+
+provider "fastly" {
+  # To use the FASTLY_API_KEY environment variable instead, leave out api_key.
+  # When api_key is set, the provider ignores FASTLY_API_KEY.
+  api_key = "FASTLY_API_TOKEN"
 }
 
 module "fingerprint_fastly_vcl_integration" {
   source                     = "fingerprintjs/vcl-fingerprint-proxy-integration/fastly"
-  fastly_api_token           = "FASTLY_API_TOKEN"
   proxy_secret               = "FINGERPRINT_PROXY_SECRET"
   integration_path           = "INTEGRATION_PATH"
   integration_domain         = "metrics.yourwebsite.com"
@@ -65,7 +77,6 @@ You can see the full list of the Terraform module's variables below:
 
 | Variable                         | Description                                                                                                                                                                                   | Required | Example                                        |
 |----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|------------------------------------------------|
-| `fastly_api_token`               | Your Fastly API token                                                                                                                                                                         | Required | `"ABC123...xyz"`                               |
 | `proxy_secret`                   | Your Fingerprint proxy secret                                                                                                                                                                 | Required | `"9h7jk2s1"`                                   |
 | `integration_path`               | Path prefix for proxy requests                                                                                                                                                                | Required | `"kyfy7t0a"`                                   |
 | `integration_domain`             | Domain used for the proxy integration                                                                                                                                                         | Required | `"metrics.yourwebsite.com"`                    |
@@ -126,6 +137,15 @@ This repository also includes an example Terraform project. Use this example onl
 ## How to update
 
 The Terraform module does include any mechanism for automatic updates. To keep your integration up to date, please run `terraform apply` regularly.
+
+### Upgrading from v2 to v3
+
+v3 no longer configures the `fastly` provider itself. This lets you use the module with `count`, `for_each` and `depends_on`.
+
+1. Add a `provider "fastly"` block with your Fastly API token to your configuration, as shown in [Install the Terraform module](#1-install-the-terraform-module).
+2. Remove `fastly_api_token` from the module block.
+
+Your existing resources are not changed.
 
 ## More resources
 

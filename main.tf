@@ -9,10 +9,6 @@ terraform {
   }
 }
 
-provider "fastly" {
-  api_key = var.fastly_api_token
-}
-
 locals {
   asset_path = "${path.cwd}/assets/${var.vcl_asset_name}"
   selected_dictionary = {
