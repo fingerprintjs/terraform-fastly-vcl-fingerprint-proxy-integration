@@ -66,6 +66,7 @@ provider "fastly" {
 
 module "fingerprint_fastly_vcl_integration" {
   source                     = "fingerprintjs/vcl-fingerprint-proxy-integration/fastly"
+  version                    = "~> 3.0"
   proxy_secret               = "FINGERPRINT_PROXY_SECRET"
   integration_path           = "INTEGRATION_PATH"
   integration_domain         = "metrics.yourwebsite.com"
@@ -143,6 +144,7 @@ To keep your integration up to date, run `terraform apply` regularly:
 
 * With `asset_version = "latest"` (the default), each plan checks the [VCL template releases](https://github.com/fingerprintjs/fastly-vcl-proxy/releases) and updates your service to the newest v2.x.y release.
 * The module never moves to a new major version of the VCL template. That needs a new major version of this module.
+* Keep the module pinned to one major version, for example `version = "~> 3.0"`, so you move to a new major version only when you change the pin.
 * To stay on one release, set `asset_version` to its tag, for example `"v2.1.2"`.
 
 ### Upgrading from v2 to v3
