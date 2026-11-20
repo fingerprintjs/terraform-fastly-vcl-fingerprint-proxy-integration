@@ -18,7 +18,7 @@ locals {
 }
 
 module "vcl_asset" {
-  count                              = var.vcl_content == null ? 1 : 0
+  count                              = var.custom_vcl == null ? 1 : 0
   source                             = "./modules/download_asset"
   asset_repository_name              = var.asset_repository_name
   asset_repository_organization_name = var.asset_repository_organization_name
@@ -45,7 +45,7 @@ resource "fastly_service_vcl" "fingerprint_integration" {
 
   vcl {
     name = var.vcl_asset_name
-    content = var.vcl_content != null ? var.vcl_content : module.vcl_asset[0].content
+    content = var.custom_vcl != null ? var.custom_vcl.content : module.vcl_asset[0].content
     main = true
   }
 

@@ -33,8 +33,15 @@ locals {
   sorted_tags = [for key in reverse(sort(keys(local.tags_by_sort_key))) : local.tags_by_sort_key[key]]
 
   # Newest tags to try, in order. A pinned asset_version is the only candidate.
-  candidate_tags = var.asset_version == "latest" ? slice(local.sorted_tags, 0, min(3, length(local.sorted_tags))) : [var.asset_version]
-  selected_tag   = try([for tag in local.candidate_tags : tag if data.http.asset[tag].status_code == 200][0], null)
+  # - The number of candidates only depends on asset_version, so it is known at plan time even when the
+  #   tag lookup is deferred to apply, for example by depends_on on the module
+  # - With fewer tags than candidates, the last candidates repeat the oldest tag. "none" means there is no tag
+  candidate_count = var.asset_version == "latest" ? 3 : 1
+  candidate_tags = var.asset_version == "latest" ? [
+    for i in range(local.candidate_count) : try(local.sorted_tags[min(i, length(local.sorted_tags) - 1)], "none")
+  ] : [var.asset_version]
+  selected_index = try([for i, tag in local.candidate_tags : i if data.http.asset[i].status_code == 200][0], null)
+  selected_tag   = local.selected_index == null ? null : local.candidate_tags[local.selected_index]
 }
 
 data "http" "tags" {
@@ -53,18 +60,18 @@ data "http" "tags" {
 }
 
 data "http" "asset" {
-  for_each = toset(local.candidate_tags)
-  url      = "https://github.com/${local.repository}/releases/download/${each.key}/${var.vcl_asset_name}"
+  count = local.candidate_count
+  url   = "https://github.com/${local.repository}/releases/download/${local.candidate_tags[count.index]}/${var.vcl_asset_name}"
 
   lifecycle {
     precondition {
-      condition     = can(regex(local.tag_pattern, each.key))
+      condition     = var.asset_version == "latest" || can(regex(local.tag_pattern, var.asset_version))
       error_message = "asset_version must be \"latest\" or a v${local.supported_major_version}.x.y release tag, got \"${var.asset_version}\"."
     }
     # 404 means the asset isn't uploaded (yet), anything else is an error
     postcondition {
       condition     = contains([200, 404], self.status_code)
-      error_message = "Could not download ${var.vcl_asset_name} from release ${each.key} of ${local.repository}. GitHub returned HTTP ${self.status_code}."
+      error_message = "Could not download ${var.vcl_asset_name} from release ${local.candidate_tags[count.index]} of ${local.repository}. GitHub returned HTTP ${self.status_code}."
     }
   }
 }

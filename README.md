@@ -88,7 +88,7 @@ You can see the full list of the Terraform module's variables below:
 | `integration_name`               | Name of the Fastly CDN service                                                                                                                                                                | Optional | `"fingerprint-fastly-vcl-proxy-integration"`   |
 | `vcl_asset_name`                 | Name of the VCL asset in the GitHub release, also used as the VCL name in the Fastly service                                                                                                  | Optional | `"fingerprint-pro-fastly-vcl-integration.vcl"` |
 | `asset_version`                  | `"latest"` for the newest v2.x.y release of the VCL template, or a v2 release tag to pin                                                                                                      | Optional | `"v2.1.2"`                                     |
-| `vcl_content`                    | Your own VCL template content. When set, the module doesn't download the official template                                                                                                    | Optional | `file("${path.module}/custom.vcl")`            |
+| `custom_vcl`                     | Your own VCL template, for example `{ content = file("custom.vcl") }`. When set, the module doesn't download the official template                                                            | Optional | `null`                                         |
 | `manage_fastly_dictionary_items` | Manage Fastly Dictionary items via terraform, see [Fastly documentation](https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#manage_items-1) | Optional | `false`                                        |
 | `force_destroy`                  | Let Terraform delete the Fastly service while it is active. Set to `false` to protect the service from being deleted                                                                          | Optional | `true`                                         |
 
@@ -100,7 +100,7 @@ The module has these outputs:
 | `service_name`       | Name of the Fastly CDN service                                                                      |
 | `active_version`     | Active version of the Fastly CDN service                                                            |
 | `dictionary_id`      | ID of the Fastly dictionary that holds the integration config                                       |
-| `vcl_version`        | Release tag of the downloaded VCL template, for example `v2.1.2`. Null when `vcl_content` is set    |
+| `vcl_version`        | Release tag of the downloaded VCL template, for example `v2.1.2`. Null when `custom_vcl` is set     |
 | `integration_domain` | Domain of the integration, read from the service                                                    |
 | `integration_url`    | Integration URL for the JavaScript agent `endpoints` option. Add `?region=REGION` to it             |
 
@@ -120,12 +120,12 @@ The module has these outputs:
 
 ## Using a custom VCL asset (optional)
 
-You can use your own VCL asset instead of downloading the official one. Pass its content in `vcl_content`:
+You can use your own VCL asset instead of downloading the official one. Pass its content in `custom_vcl`:
 
 ```diff
 module "fingerprint_fastly_vcl_integration" {
   # ...
-+ vcl_content = file("${path.module}/custom-asset.vcl")
++ custom_vcl = { content = file("${path.module}/custom-asset.vcl") }
 }
 ```
 
@@ -153,7 +153,7 @@ v3 no longer configures the `fastly` provider itself. This lets you use the modu
 
 1. Add a `provider "fastly"` block with your Fastly API token to your configuration, as shown in [Install the Terraform module](#1-install-the-terraform-module).
 2. Remove `fastly_api_token` from the module block.
-3. Remove `download_asset` from the module block if you set it, with any value. If it was `false`, pass your VCL file with `vcl_content = file("PATH_TO_YOUR_VCL_FILE")` instead.
+3. Remove `download_asset` from the module block if you set it, with any value. If it was `false`, pass your VCL file with `custom_vcl = { content = file("PATH_TO_YOUR_VCL_FILE") }` instead.
 4. If you set `asset_version`, use `"latest"` or a v2.x.y release tag. Other values are rejected.
 5. Run `terraform init -upgrade`, then `terraform plan`.
 

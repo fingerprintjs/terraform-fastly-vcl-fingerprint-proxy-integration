@@ -31,10 +31,12 @@ variable "asset_version" {
   description = "\"latest\" for the newest v2.x.y release of the VCL template, or a release tag to pin, for example \"v2.1.2\""
 }
 
-variable "vcl_content" {
-  type        = string
+variable "custom_vcl" {
+  type = object({
+    content = string
+  })
   default     = null
-  description = "Your own VCL template content. When set, the module doesn't download the official template."
+  description = "Your own VCL template, for example { content = file(\"custom.vcl\") }. When set, the module doesn't download the official template. An object, so the module knows at plan time whether to download even when content is only known after apply."
 }
 
 variable "integration_path" {

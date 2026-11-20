@@ -32,7 +32,7 @@ run "latest_picks_newest_by_semver" {
 run "falls_back_on_404" {
   command = plan
   override_data {
-    target = data.http.asset["v2.10.0"]
+    target = data.http.asset[0]
     values = { status_code = 404, response_body = "Not Found" }
   }
   assert {
@@ -44,24 +44,24 @@ run "falls_back_on_404" {
 run "fails_on_503_instead_of_falling_back" {
   command = plan
   override_data {
-    target = data.http.asset["v2.10.0"]
+    target = data.http.asset[0]
     values = { status_code = 503, response_body = "" }
   }
-  expect_failures = [data.http.asset["v2.10.0"]]
+  expect_failures = [data.http.asset[0]]
 }
 
 run "fails_when_all_candidates_404" {
   command = plan
   override_data {
-    target = data.http.asset["v2.10.0"]
+    target = data.http.asset[0]
     values = { status_code = 404 }
   }
   override_data {
-    target = data.http.asset["v2.1.2"]
+    target = data.http.asset[1]
     values = { status_code = 404 }
   }
   override_data {
-    target = data.http.asset["v2.1.1"]
+    target = data.http.asset[2]
     values = { status_code = 404 }
   }
   expect_failures = [output.content]
@@ -83,5 +83,32 @@ run "pinned_other_major_rejected" {
   variables {
     asset_version = "v1.0.0"
   }
-  expect_failures = [data.http.asset["v1.0.0"]]
+  expect_failures = [data.http.asset[0]]
+}
+
+run "single_tag_fills_all_candidates" {
+  command = plan
+  override_data {
+    target = data.http.tags[0]
+    values = {
+      status_code   = 200
+      response_body = "[{\"ref\":\"refs/tags/v2.0.0\"},{\"ref\":\"refs/tags/v2.0.0-rc.1\"}]"
+    }
+  }
+  assert {
+    condition     = output.version == "v2.0.0" && jsonencode(local.candidate_tags) == jsonencode(["v2.0.0", "v2.0.0", "v2.0.0"])
+    error_message = "got ${output.version} from ${jsonencode(local.candidate_tags)}"
+  }
+}
+
+run "fails_without_stable_tags" {
+  command = plan
+  override_data {
+    target = data.http.tags[0]
+    values = {
+      status_code   = 200
+      response_body = "[{\"ref\":\"refs/tags/v2.0.0-rc.1\"}]"
+    }
+  }
+  expect_failures = [output.content]
 }

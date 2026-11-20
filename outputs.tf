@@ -19,8 +19,8 @@ output "dictionary_id" {
 }
 
 output "vcl_version" {
-  description = "Release tag of the downloaded VCL template, for example v2.1.2. Null when vcl_content is set"
-  value       = var.vcl_content == null ? module.vcl_asset[0].version : null
+  description = "Release tag of the downloaded VCL template, for example v2.1.2. Null when custom_vcl is set"
+  value       = var.custom_vcl == null ? module.vcl_asset[0].version : null
 }
 
 output "integration_domain" {
