@@ -49,7 +49,7 @@ resource "fastly_service_vcl" "fingerprint_integration" {
     main = true
   }
 
-  force_destroy = true
+  force_destroy = var.force_destroy
 }
 
 resource "fastly_service_dictionary_items" "fingerprint_integration_dictionary_items" {

@@ -89,6 +89,7 @@ You can see the full list of the Terraform module's variables below:
 | `asset_version`                  | `"latest"` for the newest v2.x.y release of the VCL template, or a v2 release tag to pin                                                                                                      | Optional | `"v2.1.2"`                                     |
 | `vcl_content`                    | Your own VCL template content. When set, the module doesn't download the official template                                                                                                    | Optional | `file("${path.module}/custom.vcl")`            |
 | `manage_fastly_dictionary_items` | Manage Fastly Dictionary items via terraform, see [Fastly documentation](https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#manage_items-1) | Optional | `false`                                        |
+| `force_destroy`                  | Let Terraform delete the Fastly service while it is active. Set to `false` to protect the service from being deleted                                                                          | Optional | `true`                                         |
 
 The module has these outputs:
 

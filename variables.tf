@@ -93,6 +93,13 @@ variable "manage_fastly_dictionary_items" {
   description = "Manage Fastly Dictionary items via terraform, see link: https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#manage_items-1"
 }
 
+variable "force_destroy" {
+  type        = bool
+  default     = true
+  nullable    = false
+  description = "Let Terraform delete the Fastly service while it is active, for example on terraform destroy. Set to false to protect the service from being deleted"
+}
+
 variable "integration_name" {
   type = string
   default = "fingerprint-fastly-vcl-proxy-integration"
