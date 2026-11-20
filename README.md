@@ -90,6 +90,18 @@ You can see the full list of the Terraform module's variables below:
 | `vcl_content`                    | Your own VCL template content. When set, the module doesn't download the official template                                                                                                    | Optional | `file("${path.module}/custom.vcl")`            |
 | `manage_fastly_dictionary_items` | Manage Fastly Dictionary items via terraform, see [Fastly documentation](https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#manage_items-1) | Optional | `false`                                        |
 
+The module has these outputs:
+
+| Output               | Description                                                                                         |
+|----------------------|-----------------------------------------------------------------------------------------------------|
+| `service_id`         | ID of the Fastly CDN service                                                                        |
+| `service_name`       | Name of the Fastly CDN service                                                                      |
+| `active_version`     | Active version of the Fastly CDN service                                                            |
+| `dictionary_id`      | ID of the Fastly dictionary that holds the integration config                                       |
+| `vcl_version`        | Release tag of the downloaded VCL template, for example `v2.1.2`. Null when `vcl_content` is set    |
+| `integration_domain` | Domain of the integration, read from the service                                                    |
+| `integration_url`    | Integration URL for the JavaScript agent `endpoints` option. Add `?region=REGION` to it             |
+
 ## 2. Deploy your Terraform changes
 
 1. Initialize the Terraform module:
@@ -122,6 +134,7 @@ Then run `terraform apply`.
 This repository also includes an example Terraform project. Use this example only as a reference, and make sure to follow best practices when provisioning Fastly services:
 
 - [Minimal example](./examples/minimal/)
+- [Several integrations with `for_each`](./examples/multiple/)
 
 ## How to update
 

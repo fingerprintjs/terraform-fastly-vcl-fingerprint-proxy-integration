@@ -1,0 +1,15 @@
+# Replace the values with your own. Use a random string for each integration_path.
+proxy_secret = "YOUR-PROXY-SECRET-FROM-FINGERPRINT-DASHBOARD"
+
+integrations = {
+  shop = {
+    integration_domain = "metrics.shop.yourwebsite.com"
+    integration_path   = "w2kz84h"
+    main_host          = "shop.yourwebsite.com"
+  }
+  blog = {
+    integration_domain = "metrics.blog.yourwebsite.com"
+    integration_path   = "k9x7q2m"
+    main_host          = "blog.yourwebsite.com"
+  }
+}
