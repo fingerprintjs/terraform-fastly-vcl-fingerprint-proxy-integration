@@ -25,8 +25,16 @@ variable "vcl_asset_name" {
 }
 
 variable "asset_version" {
-  type    = string
-  default = "latest"
+  type        = string
+  default     = "latest"
+  nullable    = false
+  description = "\"latest\" for the newest v2.x.y release of the VCL template, or a release tag to pin, for example \"v2.1.2\""
+}
+
+variable "vcl_content" {
+  type        = string
+  default     = null
+  description = "Your own VCL template content. When set, the module doesn't download the official template."
 }
 
 variable "integration_path" {
@@ -93,9 +101,4 @@ variable "integration_name" {
     condition     = can(regex("^([a-zA-Z0-9\\_\\-])+$", var.integration_name))
     error_message = "value should only consist of alphanumeric values and underscores"
   }
-}
-
-variable "download_asset" {
-  type = bool
-  default = true
 }

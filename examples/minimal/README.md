@@ -13,9 +13,8 @@ To quickly run the example for testing purposes, you can:
     ```
     The variables are defined and described in the [variables.tf](./variables.tf).
 2. Run `terraform init`
-3. Run `terraform apply -target=module.fingerprint_fastly_vcl_integration.module.vcl_asset`
-4. Run `terraform plan`
-5. Run `terraform apply`
+3. Run `terraform plan`
+4. Run `terraform apply`
 
 ### Using in production
 

@@ -10,7 +10,6 @@ terraform {
 }
 
 locals {
-  asset_path = "${path.cwd}/assets/${var.vcl_asset_name}"
   selected_dictionary = {
     for d in fastly_service_vcl.fingerprint_integration.dictionary : d.name => d
   }[
@@ -19,13 +18,12 @@ locals {
 }
 
 module "vcl_asset" {
-  count                              = var.download_asset ? 1 : 0
+  count                              = var.vcl_content == null ? 1 : 0
   source                             = "./modules/download_asset"
   asset_repository_name              = var.asset_repository_name
   asset_repository_organization_name = var.asset_repository_organization_name
   vcl_asset_name                     = var.vcl_asset_name
-  vcl_version_min                    = var.asset_version
-  asset_download_path                = local.asset_path
+  asset_version                      = var.asset_version
 }
 
 resource "fastly_service_vcl" "fingerprint_integration" {
@@ -47,7 +45,7 @@ resource "fastly_service_vcl" "fingerprint_integration" {
 
   vcl {
     name = var.vcl_asset_name
-    content = file(local.asset_path)
+    content = var.vcl_content != null ? var.vcl_content : module.vcl_asset[0].content
     main = true
   }
 
