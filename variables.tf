@@ -25,8 +25,18 @@ variable "vcl_asset_name" {
 }
 
 variable "asset_version" {
-  type    = string
-  default = "latest"
+  type        = string
+  default     = "latest"
+  nullable    = false
+  description = "\"latest\" for the newest v2.x.y release of the VCL template, or a release tag to pin, for example \"v2.1.2\""
+}
+
+variable "custom_vcl" {
+  type = object({
+    content = string
+  })
+  default     = null
+  description = "Your own VCL template, for example { content = file(\"custom.vcl\") }. When set, the module doesn't download the official template. An object, so the module knows at plan time whether to download even when content is only known after apply."
 }
 
 variable "integration_path" {
@@ -85,6 +95,13 @@ variable "manage_fastly_dictionary_items" {
   description = "Manage Fastly Dictionary items via terraform, see link: https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#manage_items-1"
 }
 
+variable "force_destroy" {
+  type        = bool
+  default     = true
+  nullable    = false
+  description = "Let Terraform delete the Fastly service while it is active, for example on terraform destroy. Set to false to protect the service from being deleted"
+}
+
 variable "integration_name" {
   type = string
   default = "fingerprint-fastly-vcl-proxy-integration"
@@ -93,9 +110,4 @@ variable "integration_name" {
     condition     = can(regex("^([a-zA-Z0-9\\_\\-])+$", var.integration_name))
     error_message = "value should only consist of alphanumeric values and underscores"
   }
-}
-
-variable "download_asset" {
-  type = bool
-  default = true
 }

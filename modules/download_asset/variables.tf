@@ -13,12 +13,8 @@ variable "vcl_asset_name" {
   default = "fingerprint-pro-fastly-vcl-integration.vcl"
 }
 
-variable "vcl_version_min" {
-  type    = string
-  default = "latest"
-}
-
-variable "asset_download_path" {
-  type = string
+variable "asset_version" {
+  type     = string
+  default  = "latest"
   nullable = false
 }
