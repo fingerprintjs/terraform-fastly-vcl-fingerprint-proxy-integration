@@ -1,5 +1,6 @@
 # Downloads the Fingerprint VCL template from the GitHub releases of fastly-vcl-proxy.
-# - asset_version = "latest" picks the newest stable release of the supported major version
+# - asset_version = "latest" picks the newest stable tag of the supported major version
+# - Tags come from the git matching-refs API, which returns all tags with the v<major>. prefix in one response (no pagination)
 # - Any other asset_version must be a release tag of the supported major version, for example "v2.1.2"
 # - A new major version of the template needs a new major version of this module
 terraform {
@@ -17,9 +18,10 @@ locals {
   # Matches stable tags of the supported major version only, for example v2.1.2. Captures minor and patch.
   tag_pattern = "^v${local.supported_major_version}\\.(\\d+)\\.(\\d+)$"
 
+  # Pre-release tags like v2.0.0-rc.0 also have the prefix, the pattern skips them
   stable_tags = var.asset_version == "latest" ? [
-    for release in jsondecode(data.http.releases[0].response_body) : release.tag_name
-    if !release.draft && !release.prerelease && can(regex(local.tag_pattern, release.tag_name))
+    for ref in jsondecode(data.http.tags[0].response_body) : trimprefix(ref.ref, "refs/tags/")
+    if can(regex(local.tag_pattern, trimprefix(ref.ref, "refs/tags/")))
   ] : []
   # Zero-padded minor and patch, so sorting the keys as strings sorts the tags by version
   tags_by_sort_key = {
@@ -29,9 +31,9 @@ locals {
   selected_tag = var.asset_version == "latest" ? try(local.tags_by_sort_key[reverse(sort(keys(local.tags_by_sort_key)))[0]], null) : var.asset_version
 }
 
-data "http" "releases" {
+data "http" "tags" {
   count = var.asset_version == "latest" ? 1 : 0
-  url   = "https://api.github.com/repos/${local.repository}/releases?per_page=100"
+  url   = "https://api.github.com/repos/${local.repository}/git/matching-refs/tags/v${local.supported_major_version}."
   request_headers = {
     Accept = "application/vnd.github+json"
   }
@@ -39,7 +41,7 @@ data "http" "releases" {
   lifecycle {
     postcondition {
       condition     = self.status_code == 200
-      error_message = "Could not list the releases of ${local.repository}. GitHub returned HTTP ${self.status_code}."
+      error_message = "Could not list the v${local.supported_major_version} tags of ${local.repository}. GitHub returned HTTP ${self.status_code}."
     }
   }
 }

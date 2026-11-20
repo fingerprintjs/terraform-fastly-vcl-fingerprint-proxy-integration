@@ -151,7 +151,7 @@ v3 no longer configures the `fastly` provider itself. This lets you use the modu
 
 1. Add a `provider "fastly"` block with your Fastly API token to your configuration, as shown in [Install the Terraform module](#1-install-the-terraform-module).
 2. Remove `fastly_api_token` from the module block.
-3. If you set `download_asset = false`, remove it and pass your VCL file with `vcl_content = file("PATH_TO_YOUR_VCL_FILE")` instead.
+3. Remove `download_asset` from the module block if you set it, with any value. If it was `false`, pass your VCL file with `vcl_content = file("PATH_TO_YOUR_VCL_FILE")` instead.
 4. If you set `asset_version`, use `"latest"` or a v2.x.y release tag. Other values are rejected.
 5. Run `terraform init -upgrade`, then `terraform plan`.
 
