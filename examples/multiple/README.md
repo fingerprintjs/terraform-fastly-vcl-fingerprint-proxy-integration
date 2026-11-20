@@ -15,6 +15,8 @@ Learn more in the [Fastly VCL Proxy Terraform installation guide](https://docs.f
 3. Run `terraform init`
 4. Run `terraform apply`
 
+To remove the integrations, run `terraform destroy`.
+
 ### Using in production
 
 This is a simplified example. Use it as a reference but make sure to **adjust the code to your needs and security practices** before deploying it to production environments.
