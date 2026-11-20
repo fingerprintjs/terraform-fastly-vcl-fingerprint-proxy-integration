@@ -1,6 +1,8 @@
 # Downloads the Fingerprint VCL template from the GitHub releases of fastly-vcl-proxy.
 # - asset_version = "latest" picks the newest stable tag of the supported major version
 # - Tags come from the git matching-refs API, which returns all tags with the v<major>. prefix in one response (no pagination)
+# - A tag can exist before its release asset is uploaded. "latest" then falls back to the next newest tag on HTTP 404 only,
+#   so a GitHub outage fails the plan instead of moving the service to an older template
 # - Any other asset_version must be a release tag of the supported major version, for example "v2.1.2"
 # - A new major version of the template needs a new major version of this module
 terraform {
@@ -28,7 +30,11 @@ locals {
     for tag in local.stable_tags :
     format("%06d.%06d", tonumber(regex(local.tag_pattern, tag)[0]), tonumber(regex(local.tag_pattern, tag)[1])) => tag
   }
-  selected_tag = var.asset_version == "latest" ? try(local.tags_by_sort_key[reverse(sort(keys(local.tags_by_sort_key)))[0]], null) : var.asset_version
+  sorted_tags = [for key in reverse(sort(keys(local.tags_by_sort_key))) : local.tags_by_sort_key[key]]
+
+  # Newest tags to try, in order. A pinned asset_version is the only candidate.
+  candidate_tags = var.asset_version == "latest" ? slice(local.sorted_tags, 0, min(3, length(local.sorted_tags))) : [var.asset_version]
+  selected_tag   = try([for tag in local.candidate_tags : tag if data.http.asset[tag].status_code == 200][0], null)
 }
 
 data "http" "tags" {
@@ -47,20 +53,18 @@ data "http" "tags" {
 }
 
 data "http" "asset" {
-  url = "https://github.com/${local.repository}/releases/download/${coalesce(local.selected_tag, "none")}/${var.vcl_asset_name}"
+  for_each = toset(local.candidate_tags)
+  url      = "https://github.com/${local.repository}/releases/download/${each.key}/${var.vcl_asset_name}"
 
   lifecycle {
     precondition {
-      condition     = local.selected_tag != null
-      error_message = "${local.repository} has no stable v${local.supported_major_version}.x.y release."
-    }
-    precondition {
-      condition     = can(regex(local.tag_pattern, coalesce(local.selected_tag, "none")))
+      condition     = can(regex(local.tag_pattern, each.key))
       error_message = "asset_version must be \"latest\" or a v${local.supported_major_version}.x.y release tag, got \"${var.asset_version}\"."
     }
+    # 404 means the asset isn't uploaded (yet), anything else is an error
     postcondition {
-      condition     = self.status_code == 200
-      error_message = "Could not download ${var.vcl_asset_name} from release ${coalesce(local.selected_tag, "none")} of ${local.repository}. GitHub returned HTTP ${self.status_code}."
+      condition     = contains([200, 404], self.status_code)
+      error_message = "Could not download ${var.vcl_asset_name} from release ${each.key} of ${local.repository}. GitHub returned HTTP ${self.status_code}."
     }
   }
 }
