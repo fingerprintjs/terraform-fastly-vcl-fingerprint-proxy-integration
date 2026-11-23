@@ -158,7 +158,7 @@ v3 no longer configures the `fastly` provider itself. This lets you use the modu
 4. If you set `asset_version`, use `"latest"` or a v2.x.y release tag. Other values are rejected.
 5. Run `terraform init -upgrade`, then `terraform plan`.
 
-The plan destroys `module.vcl_asset[0].null_resource.download_asset`, which only ran the old download script. It doesn't touch Fastly.
+The plan destroys `module.fingerprint_fastly_vcl_integration.module.vcl_asset[0].null_resource.download_asset`, which only ran the old download script. It doesn't touch Fastly.
 v2 of the module downloaded the VCL template only once, so the plan may also update the VCL in your Fastly service to the newest v2.x.y release.
 
 ## More resources

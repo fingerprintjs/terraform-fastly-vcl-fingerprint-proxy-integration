@@ -24,7 +24,7 @@ output "vcl_version" {
 }
 
 output "integration_domain" {
-  description = "Domain of the integration. Read from the service, so resources that use it wait for the service, for example a TLS subscription"
+  description = "Domain of the integration, read from the service"
   value       = one(fastly_service_vcl.fingerprint_integration.domain).name
 }
 

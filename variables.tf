@@ -35,7 +35,7 @@ variable "github_token" {
   type        = string
   default     = null
   sensitive   = true
-  description = "Optional GitHub token for listing the VCL template releases. Without it, GitHub allows 60 requests per hour per IP. Any token works, it needs no scopes. Terraform keeps it in the state, like other sensitive values"
+  description = "Optional GitHub token for listing the VCL template releases, to avoid the limit of 60 requests per hour per IP. Needs no scopes"
 }
 
 variable "custom_vcl" {
@@ -43,7 +43,7 @@ variable "custom_vcl" {
     content = string
   })
   default     = null
-  description = "Your own VCL template, for example { content = file(\"custom.vcl\") }. When set, the module doesn't download the official template. An object, so the module knows at plan time whether to download even when content is only known after apply."
+  description = "Your own VCL template, for example { content = file(\"custom.vcl\") }. When set, the official template isn't downloaded"
 }
 
 variable "integration_path" {

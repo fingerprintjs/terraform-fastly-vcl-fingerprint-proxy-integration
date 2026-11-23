@@ -1,10 +1,5 @@
-# Downloads the Fingerprint VCL template from the GitHub releases of fastly-vcl-proxy.
-# - asset_version = "latest" picks the newest stable tag of the supported major version
-# - Tags come from the git matching-refs API, which returns all tags with the v<major>. prefix in one response (no pagination)
-# - A tag can exist before its release asset is uploaded. "latest" then falls back to the next newest tag on HTTP 404 only,
-#   so a GitHub outage fails the plan instead of moving the service to an older template
-# - Any other asset_version must be a release tag of the supported major version, for example "v2.1.2"
-# - A new major version of the template needs a new major version of this module
+# Downloads the Fingerprint VCL template from the fastly-vcl-proxy GitHub releases.
+# Only v2.x.y releases are used. A new template major needs a new major of this module.
 terraform {
   required_providers {
     http = {
@@ -17,25 +12,21 @@ terraform {
 locals {
   supported_major_version = 2
   repository              = "${var.asset_repository_organization_name}/${var.asset_repository_name}"
-  # Matches stable tags of the supported major version only, for example v2.1.2. Captures minor and patch.
+  # Stable v2.x.y tags only, so pre-releases are skipped
   tag_pattern = "^v${local.supported_major_version}\\.(\\d+)\\.(\\d+)$"
 
-  # Pre-release tags like v2.0.0-rc.0 also have the prefix, the pattern skips them
   stable_tags = var.asset_version == "latest" ? [
     for ref in jsondecode(data.http.tags[0].response_body) : trimprefix(ref.ref, "refs/tags/")
     if can(regex(local.tag_pattern, trimprefix(ref.ref, "refs/tags/")))
   ] : []
-  # Zero-padded minor and patch, so sorting the keys as strings sorts the tags by version
+  # Zero-padded, so a string sort is a version sort
   tags_by_sort_key = {
     for tag in local.stable_tags :
     format("%06d.%06d", tonumber(regex(local.tag_pattern, tag)[0]), tonumber(regex(local.tag_pattern, tag)[1])) => tag
   }
   sorted_tags = [for key in reverse(sort(keys(local.tags_by_sort_key))) : local.tags_by_sort_key[key]]
 
-  # Newest tags to try, in order. A pinned asset_version is the only candidate.
-  # - The number of candidates only depends on asset_version, so it is known at plan time even when the
-  #   tag lookup is deferred to apply, for example by depends_on on the module
-  # - With fewer tags than candidates, the last candidates repeat the oldest tag. "none" means there is no tag
+  # Up to 3 newest tags to try. A fixed count keeps it known at plan time when depends_on defers the tag lookup
   candidate_count = var.asset_version == "latest" ? 3 : 1
   candidate_tags = var.asset_version == "latest" ? [
     for i in range(local.candidate_count) : try(local.sorted_tags[min(i, length(local.sorted_tags) - 1)], "none")
@@ -69,7 +60,7 @@ data "http" "asset" {
       condition     = var.asset_version == "latest" || can(regex(local.tag_pattern, var.asset_version))
       error_message = "asset_version must be \"latest\" or a v${local.supported_major_version}.x.y release tag, got \"${var.asset_version}\"."
     }
-    # 404 means the asset isn't uploaded (yet), anything else is an error
+    # 404: asset not uploaded yet, try the next tag
     postcondition {
       condition     = contains([200, 404], self.status_code)
       error_message = "Could not download ${var.vcl_asset_name} from release ${local.candidate_tags[count.index]} of ${local.repository}. GitHub returned HTTP ${self.status_code}."
