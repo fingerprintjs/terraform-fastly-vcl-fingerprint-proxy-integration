@@ -66,3 +66,17 @@ resource "fastly_service_dictionary_items" "fingerprint_integration_dictionary_i
     } : k => v if v != null
   }
 }
+
+# Terraform deletes the dictionary items before the service. With force_destroy = false, Fastly then refuses to
+# delete the active service, which would leave it running without its config. This guard is deleted first and
+# fails instead, so nothing is deleted.
+resource "terraform_data" "destroy_guard" {
+  input = var.force_destroy
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = self.input ? "exit 0" : "echo force_destroy is false, so the Fastly service and its dictionary items are kept && exit 1"
+  }
+
+  depends_on = [fastly_service_dictionary_items.fingerprint_integration_dictionary_items]
+}

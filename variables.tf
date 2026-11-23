@@ -106,7 +106,7 @@ variable "force_destroy" {
   type        = bool
   default     = true
   nullable    = false
-  description = "Let Terraform delete the Fastly service while it is active, for example on terraform destroy. Set to false to protect the service from being deleted"
+  description = "Let Terraform delete the Fastly service and its dictionary items, for example on terraform destroy. Set to false to make the destroy fail without deleting anything"
 }
 
 variable "integration_name" {

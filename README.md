@@ -91,7 +91,7 @@ You can see the full list of the Terraform module's variables below:
 | `custom_vcl`                     | Your own VCL template, for example `{ content = file("custom.vcl") }`. When set, the module doesn't download the official template                                                            | Optional | `null`                                         |
 | `github_token`                   | Optional GitHub token for listing the VCL template releases, so plans don't hit the limit of 60 requests per hour per IP. Needs no scopes                                                     | Optional | `"ghp_..."`                                    |
 | `manage_fastly_dictionary_items` | Manage Fastly Dictionary items via terraform, see [Fastly documentation](https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#manage_items-1) | Optional | `false`                                        |
-| `force_destroy`                  | Let Terraform delete the Fastly service while it is active. Set to `false` to protect the service from being deleted                                                                          | Optional | `true`                                         |
+| `force_destroy`                  | Let Terraform delete the Fastly service and its dictionary items. Set to `false` to make `terraform destroy` fail without deleting anything                                                   | Optional | `true`                                         |
 
 The module has these outputs:
 
@@ -159,6 +159,7 @@ v3 no longer configures the `fastly` provider itself. This lets you use the modu
 5. Run `terraform init -upgrade`, then `terraform plan`.
 
 The plan destroys `module.fingerprint_fastly_vcl_integration.module.vcl_asset[0].null_resource.download_asset`, which only ran the old download script. It doesn't touch Fastly.
+It also creates `module.fingerprint_fastly_vcl_integration.terraform_data.destroy_guard`, which only runs on `terraform destroy`.
 v2 of the module downloaded the VCL template only once, so the plan may also update the VCL in your Fastly service to the newest v2.x.y release.
 
 ## More resources
