@@ -10,7 +10,6 @@ terraform {
 }
 
 locals {
-  asset_path = "${path.cwd}/assets/${var.vcl_asset_name}"
   selected_dictionary = {
     for d in fastly_service_vcl.fingerprint_integration.dictionary : d.name => d
   }[
@@ -19,13 +18,13 @@ locals {
 }
 
 module "vcl_asset" {
-  count                              = var.download_asset ? 1 : 0
+  count                              = var.custom_vcl == null ? 1 : 0
   source                             = "./modules/download_asset"
   asset_repository_name              = var.asset_repository_name
   asset_repository_organization_name = var.asset_repository_organization_name
   vcl_asset_name                     = var.vcl_asset_name
-  vcl_version_min                    = var.asset_version
-  asset_download_path                = local.asset_path
+  asset_version                      = var.asset_version
+  github_token                       = var.github_token
 }
 
 resource "fastly_service_vcl" "fingerprint_integration" {
@@ -47,11 +46,11 @@ resource "fastly_service_vcl" "fingerprint_integration" {
 
   vcl {
     name = var.vcl_asset_name
-    content = file(local.asset_path)
+    content = var.custom_vcl != null ? var.custom_vcl.content : module.vcl_asset[0].content
     main = true
   }
 
-  force_destroy = true
+  force_destroy = var.force_destroy
 }
 
 resource "fastly_service_dictionary_items" "fingerprint_integration_dictionary_items" {
@@ -66,4 +65,18 @@ resource "fastly_service_dictionary_items" "fingerprint_integration_dictionary_i
       GET_RESULT_PATH            = var.get_result_path
     } : k => v if v != null
   }
+}
+
+# Terraform deletes the dictionary items before the service. With force_destroy = false, Fastly then refuses to
+# delete the active service, which would leave it running without its config. This guard is deleted first and
+# fails instead, so nothing is deleted.
+resource "terraform_data" "destroy_guard" {
+  input = var.force_destroy
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = self.input ? "exit 0" : "echo force_destroy is false, so the Fastly service and its dictionary items are kept && exit 1"
+  }
+
+  depends_on = [fastly_service_dictionary_items.fingerprint_integration_dictionary_items]
 }

@@ -13,12 +13,15 @@ variable "vcl_asset_name" {
   default = "fingerprint-pro-fastly-vcl-integration.vcl"
 }
 
-variable "vcl_version_min" {
-  type    = string
-  default = "latest"
+variable "asset_version" {
+  type     = string
+  default  = "latest"
+  nullable = false
 }
 
-variable "asset_download_path" {
-  type = string
-  nullable = false
+variable "github_token" {
+  type        = string
+  default     = null
+  sensitive   = true
+  description = "Optional GitHub token for listing the release tags"
 }

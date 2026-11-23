@@ -66,6 +66,7 @@ provider "fastly" {
 
 module "fingerprint_fastly_vcl_integration" {
   source                     = "fingerprintjs/vcl-fingerprint-proxy-integration/fastly"
+  version                    = "~> 3.0"
   proxy_secret               = "FINGERPRINT_PROXY_SECRET"
   integration_path           = "INTEGRATION_PATH"
   integration_domain         = "metrics.yourwebsite.com"
@@ -85,10 +86,24 @@ You can see the full list of the Terraform module's variables below:
 | `get_result_path`                | Path for identification requests (API v3 Only)                                                                                                                                                | Optional | `"sy5k3279"`                                   |
 | `dictionary_name`                | Name of the Fastly Dictionary for config values                                                                                                                                               | Optional | `"fingerprint_config"`                         |
 | `integration_name`               | Name of the Fastly CDN service                                                                                                                                                                | Optional | `"fingerprint-fastly-vcl-proxy-integration"`   |
-| `download_asset`                 | Whether to auto-download the latest VCL release                                                                                                                                               | Optional | `true`                                         |
-| `vcl_asset_name`                 | Custom VCL asset file if not downloading the official one                                                                                                                                     | Optional | `"fingerprint-pro-fastly-vcl-integration.vcl"` |
-| `asset_version`                  | GitHub release version used for the VCL asset                                                                                                                                                 | Optional | `"latest"`                                     |
+| `vcl_asset_name`                 | Name of the VCL asset in the GitHub release, also used as the VCL name in the Fastly service                                                                                                  | Optional | `"fingerprint-pro-fastly-vcl-integration.vcl"` |
+| `asset_version`                  | `"latest"` for the newest v2.x.y release of the VCL template, or a v2 release tag to pin                                                                                                      | Optional | `"v2.1.2"`                                     |
+| `custom_vcl`                     | Your own VCL template, for example `{ content = file("custom.vcl") }`. When set, the module doesn't download the official template                                                            | Optional | `null`                                         |
+| `github_token`                   | Optional GitHub token for listing the VCL template releases, so plans don't hit the limit of 60 requests per hour per IP. Needs no scopes                                                     | Optional | `"ghp_..."`                                    |
 | `manage_fastly_dictionary_items` | Manage Fastly Dictionary items via terraform, see [Fastly documentation](https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#manage_items-1) | Optional | `false`                                        |
+| `force_destroy`                  | Let Terraform delete the Fastly service and its dictionary items. Set to `false` to make `terraform destroy` fail without deleting anything                                                   | Optional | `true`                                         |
+
+The module has these outputs:
+
+| Output               | Description                                                                                         |
+|----------------------|-----------------------------------------------------------------------------------------------------|
+| `service_id`         | ID of the Fastly CDN service                                                                        |
+| `service_name`       | Name of the Fastly CDN service                                                                      |
+| `active_version`     | Active version of the Fastly CDN service                                                            |
+| `dictionary_id`      | ID of the Fastly dictionary that holds the integration config                                       |
+| `vcl_version`        | Release tag of the downloaded VCL template, for example `v2.1.2`. Null when `custom_vcl` is set     |
+| `integration_domain` | Domain of the integration, read from the service                                                    |
+| `integration_url`    | Integration URL for the JavaScript agent `endpoints` option. Add `?region=REGION` to it             |
 
 ## 2. Deploy your Terraform changes
 
@@ -98,13 +113,7 @@ You can see the full list of the Terraform module's variables below:
     terraform init
     ```
 
-2. Apply the VCL asset:
-
-    ```shell
-    terraform apply -target=module.fingerprint_fastly_vcl_integration.module.vcl_asset
-    ```
-
-3. Apply the changes to your Fastly service:
+2. Apply the changes to your Fastly service:
 
     ```shell
     terraform apply
@@ -112,31 +121,32 @@ You can see the full list of the Terraform module's variables below:
 
 ## Using a custom VCL asset (optional)
 
-You can use your own VCL asset instead of downloading the official one: 
+You can use your own VCL asset instead of downloading the official one. Pass its content in `custom_vcl`:
 
-1. Place your custom asset in `<your_module_root>/assets/custom-asset.vcl`
-2. In your `main.tf` file, add these 2 variables to the module configuration:
+```diff
+module "fingerprint_fastly_vcl_integration" {
+  # ...
++ custom_vcl = { content = file("${path.module}/custom-asset.vcl") }
+}
+```
 
-    ```diff
-    module "fingerprint_fastly_vcl_integration" {
-      # ...
-    + download_asset = false
-    + vcl_asset_name = "custom-asset.vcl"
-    }
-    ```
-
-3. Run `terraform init`.
-4. Run `terraform apply`.
+Then run `terraform apply`.
 
 ## Examples
 
 This repository also includes an example Terraform project. Use this example only as a reference, and make sure to follow best practices when provisioning Fastly services:
 
 - [Minimal example](./examples/minimal/)
+- [Several integrations with `for_each`](./examples/multiple/)
 
 ## How to update
 
-The Terraform module does include any mechanism for automatic updates. To keep your integration up to date, please run `terraform apply` regularly.
+To keep your integration up to date, run `terraform apply` regularly:
+
+* With `asset_version = "latest"` (the default), each plan checks the [VCL template releases](https://github.com/fingerprintjs/fastly-vcl-proxy/releases) and updates your service to the newest v2.x.y release.
+* The module never moves to a new major version of the VCL template. That needs a new major version of this module.
+* Keep the module pinned to one major version, for example `version = "~> 3.0"`, so you move to a new major version only when you change the pin.
+* To stay on one release, set `asset_version` to its tag, for example `"v2.1.2"`.
 
 ### Upgrading from v2 to v3
 
@@ -144,8 +154,13 @@ v3 no longer configures the `fastly` provider itself. This lets you use the modu
 
 1. Add a `provider "fastly"` block with your Fastly API token to your configuration, as shown in [Install the Terraform module](#1-install-the-terraform-module).
 2. Remove `fastly_api_token` from the module block.
+3. Remove `download_asset` from the module block if you set it, with any value. If it was `false`, pass your VCL file with `custom_vcl = { content = file("PATH_TO_YOUR_VCL_FILE") }` instead.
+4. If you set `asset_version`, use `"latest"` or a v2.x.y release tag. Other values are rejected.
+5. Run `terraform init -upgrade`, then `terraform plan`.
 
-Your existing resources are not changed.
+The plan destroys `module.fingerprint_fastly_vcl_integration.module.vcl_asset[0].null_resource.download_asset`, which only ran the old download script. It doesn't touch Fastly.
+It also creates `module.fingerprint_fastly_vcl_integration.terraform_data.destroy_guard`, which only runs on `terraform destroy`.
+v2 of the module downloaded the VCL template only once, so the plan may also update the VCL in your Fastly service to the newest v2.x.y release.
 
 ## More resources
 

@@ -1,6 +1,6 @@
 # Replace the values with your own, random string for integration_path is recommended
 integration_path            = "fp"
-proxy_secret                = "YOUR_PROXY_SECRET_KEY_CREATED_IN_FINGERPRINT_DASHBOARD"
+proxy_secret                = "YOUR-PROXY-SECRET-FROM-FINGERPRINT-DASHBOARD"
 fastly_api_token            = "YOUR_API_TOKEN_CREATED_IN_FASTLY_DASHBOARD"
 // You can test the integration using the Fastly test domain, like `https://metrics.yourwebsite.com.global.prod.fastly.net`
 integration_domain          = "metrics.yourwebsite.com"
