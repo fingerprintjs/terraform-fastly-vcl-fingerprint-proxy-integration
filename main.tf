@@ -24,6 +24,7 @@ module "vcl_asset" {
   asset_repository_organization_name = var.asset_repository_organization_name
   vcl_asset_name                     = var.vcl_asset_name
   asset_version                      = var.asset_version
+  github_token                       = var.github_token
 }
 
 resource "fastly_service_vcl" "fingerprint_integration" {

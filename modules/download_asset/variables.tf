@@ -18,3 +18,10 @@ variable "asset_version" {
   default  = "latest"
   nullable = false
 }
+
+variable "github_token" {
+  type        = string
+  default     = null
+  sensitive   = true
+  description = "Optional GitHub token for listing the release tags. Without it, GitHub allows 60 requests per hour per IP"
+}

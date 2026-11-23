@@ -112,3 +112,22 @@ run "fails_without_stable_tags" {
   }
   expect_failures = [output.content]
 }
+
+run "github_token_is_sent_to_the_tags_api" {
+  command = plan
+  variables {
+    github_token = "TOKEN"
+  }
+  assert {
+    condition     = data.http.tags[0].request_headers["Authorization"] == "Bearer TOKEN"
+    error_message = "Authorization header is missing"
+  }
+}
+
+run "no_authorization_header_without_token" {
+  command = plan
+  assert {
+    condition     = !contains(keys(data.http.tags[0].request_headers), "Authorization")
+    error_message = "Authorization header should not be set"
+  }
+}

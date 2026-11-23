@@ -31,6 +31,13 @@ variable "asset_version" {
   description = "\"latest\" for the newest v2.x.y release of the VCL template, or a release tag to pin, for example \"v2.1.2\""
 }
 
+variable "github_token" {
+  type        = string
+  default     = null
+  sensitive   = true
+  description = "Optional GitHub token for listing the VCL template releases. Without it, GitHub allows 60 requests per hour per IP. Any token works, it needs no scopes. Terraform keeps it in the state, like other sensitive values"
+}
+
 variable "custom_vcl" {
   type = object({
     content = string

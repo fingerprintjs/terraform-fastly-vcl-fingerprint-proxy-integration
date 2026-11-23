@@ -47,9 +47,10 @@ locals {
 data "http" "tags" {
   count = var.asset_version == "latest" ? 1 : 0
   url   = "https://api.github.com/repos/${local.repository}/git/matching-refs/tags/v${local.supported_major_version}."
-  request_headers = {
-    Accept = "application/vnd.github+json"
-  }
+  request_headers = merge(
+    { Accept = "application/vnd.github+json" },
+    var.github_token == null ? {} : { Authorization = "Bearer ${var.github_token}" },
+  )
 
   lifecycle {
     postcondition {
